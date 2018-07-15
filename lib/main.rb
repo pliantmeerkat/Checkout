@@ -1,20 +1,26 @@
+
 # main class
 class Main
   attr_reader :till
   def initialize
     @till = Till.new # create a till on startup
+    @command = ''
+    @welcome_text = "Welcome\n" \
+                 "Enter an item to start\n" \
+                 "Enter 'q' at any time to quit or 't' to total\n"
   end
 
   def main
-    puts(
-      "Welcome\n",
-      "Enter an item to start\n",
-      "Enter 'q' at any time to quit or 't' to total\n"
-    )
-    while true
-      break if gets.chomp == 'q'
-      total if gets.chomp == 't'
-      @till.items.push(Item.new(gets.chomp.to_i))
+    puts @welcome_text
+    until @command == 'q'
+      @command = gets.chomp
+      if @command == 't'
+        total
+        next
+      else
+        @till.scan(Item.new(@command.to_i))
+        puts "#{@command} added to basket"
+      end
     end
   end
 
@@ -22,15 +28,11 @@ class Main
     puts 'Thank you!'
   end
 
-  def exit
-    puts 'Goodbye!'
-  end
-
-  def scan
-    
+  def scan(item)
+    till.items.push(item)
   end
 
   def total
-    puts "£#{'%.2f' % till.total}" # puts total in correct format
+    puts "£#{'%.2f' % @till.total}" # puts total in correct format
   end
 end

@@ -15,34 +15,14 @@ describe Main do
       subject.sale
     end
   end
-  describe 'exit' do
-    it { expect(subject).to respond_to(:exit) }
-    it 'should print message on exit' do
-      expect(STDOUT).to receive(:puts).with('Goodbye!')
-      subject.exit
-    end
-  end
   describe 'scan' do
-    it { expect(subject).to respond_to(:scan) }
+    it { expect(subject).to respond_to(:scan).with(1).arguments }
   end
   describe 'total' do
     it { expect(subject).to respond_to(:total) }
     it 'should print a total cost on total' do
       expect(STDOUT).to receive(:puts).with('£0.00') # default
       subject.total
-    end
-  end
-end
-
-describe Main do
-  describe '#main' do
-    it 'prints the correct output' do
-      expect(STDOUT).to receive(:puts).with(
-        "Welcome\n",
-        "Enter an item to start\n",
-        "Enter 'q' at any time to quit or 't' to total\n"
-      )
-      subject.main
     end
   end
 end
