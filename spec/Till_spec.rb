@@ -2,31 +2,52 @@ require './lib/Till'
 require './lib/Item'
 
 describe Till do
-    till = Till.new
-    it 'can scan items' do
-        i = Item.new
-        till.items.push(i) # test adding item to array
-        expect(till.items[-1]).to eq(i) #should equal last value in array
-    end 
-
-    it 'can add item costs to total' do
-        total = 0 # our mock total object for testing
-        5.times do
-            rand = 1 + rand(200); total += rand # generate a random number and add to total
-            expect(till).to respond_to(:total) # does method exist
-            expect(till.total += rand).to eq(total) # is our total correct
+  after(:each) do # run formatting tests after every example
+    expect(subject.show_total.length).to be > 4 # at least 5 chars long
+    expect(subject.show_total[0]).to eq('£') # first char should be pound
+    expect(subject.show_total[-3]).to eq('.') # 3rd last character is .
+  end
+  item = Item.new
+  describe 'can scan items' do
+    it { expect(subject).to respond_to(:scan).with(1).argument } # can scan
+    it 'can scan correctly' do
+      subject.scan(item) # scan an item
+      expect(subject.items[-1]).to eq(item) # should equal last value in array
+    end
+  end
+  describe 'adding items to total tests' do
+    it 'methods exist' do
+      expect(subject).to respond_to(:total) # does method exist
+    end
+    5.times do # run this test 5 times
+      it 'can add an item at random price to total' do
+        # do this 5 times at different prices
+        rand = 1 + rand(200); item.price = rand # random price for item
+        subject.scan(item) # scan our item
+        expect(subject.total).to eq(item.price) # is our total correct
+      end
+    end
+  end
+  describe 'can display the total cost to customer' do
+    it { expect(subject).to respond_to(:show_total) } # does method exist
+  end
+  describe 'random tests' do
+    it 'can add 10 items to the list at the same price' do
+      10.times do |_|
+        subject.scan(Item.new(5.00)) # scan 10 items at 5.00
+      end
+      expect(subject.total).to eq(50) # should be 50
+    end
+    3.times do |_| # run test three times
+      it 'can add 10 items at different prices' do
+        total = 0.00 # moch total object
+        10.times do |_|
+          price = rand(0.01...200.00) # randomise price
+          subject.scan(Item.new(price)) # scan item
+          total += price # add price to local total object
         end
-    end 
-
-    it 'can display the total cost to customer' do
-        expect(till).to respond_to(:show_total) # does method exist
-        expect(till.show_total).to eq(till.total) # is the printed total correct
+        expect(subject.total).to eq(total) # totals should match
+      end
     end
-
-    it 'can display prices in the correct format' do
-        expect(till.show_total).to be_a(String) # should be a string
-        expect(till.show_total.length).to eq(5) # should be 5 characters long
-        expect(till.show_total[0]).to eq('£') # first char should be pound symbol
-    end
-
+  end
 end

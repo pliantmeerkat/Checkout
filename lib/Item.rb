@@ -1,15 +1,8 @@
-
+# Item class
 class Item
+  attr_accessor :price
 
-    attr_accessor :price
-
-    def initialize(price=0)
-        @price = price
-    end
-
-    def show_price
-        print "£#{@price}"
-        return @price
-    end
-
+  def initialize(price = 0.00)
+    @price = price.to_f
+  end
 end
