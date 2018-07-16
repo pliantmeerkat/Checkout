@@ -18,7 +18,7 @@ class Main
         total
         next
       else
-        Item.new(@command.to_i)
+        scan(Item.new(@command.to_i))
       end
     end
   end
@@ -31,7 +31,7 @@ class Main
 
   def scan(item)
     @till.scan(item)
-    print_text("#{item.price} added to basket")
+    print_text("#{'%.2f' % item.price} added to basket")
   end
 
   def print_text(text)

@@ -34,7 +34,10 @@ describe Main do
   end
   describe '#scan' do
     it 'prints scaned items correctly' do
-      expect { subject.print_text(subject.scan(item)) }.to output('1.0 added to basket').to_stdout
+      expect { subject.print_text(subject.scan(item)) }.to output('1.00 added to basket').to_stdout
+    end
+    it 'prints float prices correctle' do
+      expect { subject.print_text(subject.scan(Item.new(1.50))) }.to output('1.50 added to basket').to_stdout
     end
     it 'adds scanned items to total' do
       subject.scan(item)

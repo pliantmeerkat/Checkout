@@ -56,9 +56,9 @@ describe Till do
   describe 'random tests' do
     it 'can add 10 items to the list at the same price' do
       10.times do |_|
-        subject.scan(Item.new(5.00)) # scan 10 items at 5.00
+        subject.scan(Item.new(5.10)) # scan 10 items at 5.00
       end
-      expect(subject.total).to eq(50) # should be 50
+      expect(subject.total.round).to eq(51) # should be 50
     end
     3.times do |_| # run test three times
       it 'can add 10 items at different prices' do
@@ -66,7 +66,7 @@ describe Till do
         10.times do |_|
           price = rand(0.01...200.00) # randomise price
           subject.scan(Item.new(price)) # scan item
-          total += price # add price to local total object
+          total += price.round(2) # add price to local total object
         end
         expect(subject.total).to eq(total) # totals should match
       end
