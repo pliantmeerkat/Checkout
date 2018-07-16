@@ -55,8 +55,6 @@ describe Main do
     end
   end
 end
-
-
 describe Main do
   context 'simulation tests' do
     welcome_text = ['Welcome',
@@ -76,7 +74,6 @@ describe Main do
     end
   end
 end
-
 describe Main do
   context 'edge tests' do
     describe 'bad input tests' do
