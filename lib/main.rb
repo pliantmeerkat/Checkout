@@ -3,7 +3,7 @@
 class Main
   attr_reader :till
   def initialize
-    @till = Till.new # create a till on startup
+    @till = Till.new # create a till on startup, may add more tills
     @command = ''
     @welcome_text = "Welcome\n" \
                  "Enter an item to start\n" \
@@ -11,28 +11,34 @@ class Main
   end
 
   def main
-    puts @welcome_text
+    print_text(@welcome_text)
     until @command == 'q'
       @command = gets.chomp
       if @command == 't'
         total
         next
       else
-        @till.scan(Item.new(@command.to_i))
-        puts "#{@command} added to basket"
+        scan(Item.new(@command.to_i))
       end
     end
   end
 
   def sale
-    puts 'Thank you!'
+    return raise 'no items in basket' unless @till.total != 0
+    @till.process_sale
+    print_text('Thank you!')
   end
 
   def scan(item)
-    till.items.push(item)
+    @till.scan(item)
+    print_text("#{'%.2f' % item.price} added to basket")
+  end
+
+  def print_text(text)
+    print text
   end
 
   def total
-    puts "£#{'%.2f' % @till.total}" # puts total in correct format
+    print_text("£#{'%.2f' % @till.total}") # puts total in correct format
   end
 end
